@@ -1,0 +1,17 @@
+@use '../base' as *;
+
+body {
+    background-color: map-get($colors, body);
+    font-family: $font-family;
+    width: min(100%, 120rem);
+    margin-inline: auto;
+    display: grid;
+    gap: 3rem;
+    justify-content: center;
+    align-items: start;
+    grid-template-columns: 1.5fr 4fr;
+    grid-template-rows: max-content 1fr;
+    grid-template-areas:
+        'aside header'
+        'aside main';
+}

@@ -1,0 +1,25 @@
+@use '../base' as *;
+
+.header {
+    grid-area: header;
+    width: 90%;
+    margin-top: 5rem;
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__button {
+        cursor: pointer;
+        padding: 0.55rem 1.5rem;
+        background-color: map-get($colors, primary-dark);
+        border-radius: .5rem;
+        transition: all 250ms ease-in-out;
+    }
+
+    &__button:is(:hover, :focus) {
+        background-color: map-get($colors, body);
+        border: 2px solid map-get($colors, primary-dark);
+        color: map-get($colors, primary-dark);
+    }
+}

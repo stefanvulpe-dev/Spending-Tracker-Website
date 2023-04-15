@@ -1,0 +1,108 @@
+@use './config' as *;
+
+$font-family: 'Inter', system-ui;
+$font-weights: (
+  regular: 400,
+  semi-bold: 600,
+  bold: 700,
+  extra-bold: 800,
+);
+$font-sizes: (
+  small: (
+    small-100: 0.875rem,
+    small-200: 1rem,
+  ),
+  regular: (
+    regular-100: 1.25rem,
+    regular-200: 1.5rem,
+  ),
+  large: (
+    large-100: 2.25rem,
+  ),
+);
+
+@each $size, $size-map in $font-sizes {
+  @each $amount, $actual-size in $size-map {
+    .fs-#{$amount} {
+      font-size: $actual-size;
+    }
+  }
+}
+
+@each $size, $weight in $font-weights {
+  .fw-#{$weight} {
+    font-weight: $weight;
+  }
+}
+
+@include media(map-get($breakpoints, large)) {
+  $font-sizes: (
+    small: (
+      small-100: 0.65rem,
+      small-200: 0.875rem,
+    ),
+    regular: (
+      regular-100: 1rem,
+      regular-200: 1.15rem,
+    ),
+    large: (
+      large-100: 1.75rem,
+    ),
+  );
+
+  @each $size, $size-map in $font-sizes {
+    @each $amount, $actual-size in $size-map {
+      .fs-#{$amount} {
+        font-size: $actual-size;
+      }
+    }
+  }
+}
+
+@include media(map-get($breakpoints, medium)) {
+  $font-sizes: (
+    small: (
+      small-100: 0.65rem,
+      small-200: 0.75rem,
+    ),
+    regular: (
+      regular-100: 0.875rem,
+      regular-200: 1rem,
+    ),
+    large: (
+      large-100: 1.5rem,
+    ),
+  );
+
+  @each $size, $size-map in $font-sizes {
+    @each $amount, $actual-size in $size-map {
+      .fs-#{$amount} {
+        font-size: $actual-size;
+      }
+    }
+  }
+}
+
+@include media(map-get($breakpoints, small)) {
+  $font-sizes: (
+    small: (
+      small-100: 0.5rem,
+      small-200: 0.65rem,
+    ),
+    regular: (
+      regular-100: 0.675rem,
+      regular-200: 0.75rem,
+    ),
+    large: (
+      large-100: 1.35rem,
+    ),
+  );
+
+  @each $size, $size-map in $font-sizes {
+    @each $amount, $actual-size in $size-map {
+      .fs-#{$amount} {
+        font-size: $actual-size;
+      }
+    }
+  }
+}

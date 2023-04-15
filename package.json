@@ -1,0 +1,26 @@
+{
+  "name": "expenseapp",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A simple web app that keeps track of your incomes and expenses.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Stefan Vulpe",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "compile-sass": "^2.0.0",
+    "date-utils-2020": "^1.1.0",
+    "express": "^4.18.2",
+    "pg": "^8.10.0",
+    "sass": "^1.62.0",
+    "sequelize": "^6.31.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.22"
+  }
+}

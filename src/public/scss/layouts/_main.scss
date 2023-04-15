@@ -1,0 +1,97 @@
+@use '../base/' as *;
+
+.main {
+    grid-area: main;
+    width: 90%;
+    display: grid;
+    gap: 2rem;
+    grid-auto-flow: row;
+    align-content: start;
+    margin-bottom: 2rem;
+
+    &__title {
+        display: flex;
+        gap: 1rem;
+        & > * {
+            flex-shrink: 0;
+        }
+    }
+
+    &__stats {
+        display: flex;
+        gap: 2rem;
+
+        &-card {
+            flex: 1;
+            background-color: map-get($colors, primary-white);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 1rem;
+
+            img {
+                background-color: map-get($colors, secondary-light-gray);
+                border-radius: 5rem;
+                padding: 0.75rem;
+            }
+        }
+    }
+
+    .history {
+        display: grid;
+        grid-auto-flow: row;
+        gap: 1rem; 
+
+        &__card {
+            display: flex;
+            justify-content: space-between;
+            background-color: map-get($colors, primary-white);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            gap: .5rem;
+        
+            &-component {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 1rem;
+
+                img {
+                    padding: 0.5rem;
+                    border-radius: 0.25rem;
+                }
+            }
+
+            &-options {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 1.5rem;
+
+                .edit-button {
+                    padding: 0.5rem;
+                    background-color: map-get($colors, secondary-light-gray);
+                    border-radius: 0.25rem;
+                    border: none;
+                    cursor: pointer;
+                    outline: inherit;
+                    box-shadow: 0 0 3px black;
+                    transition: all 250ms ease-in-out;
+                }
+
+                .edit-button:is(:hover, :focus) {
+                    background-color: map-get($colors, primary-white);
+                }
+
+            }
+        }
+
+        .main__expenses {
+            display: grid;
+            gap: 1.5rem;
+        }
+    }
+}

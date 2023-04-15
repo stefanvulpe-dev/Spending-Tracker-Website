@@ -1,0 +1,95 @@
+@use '../base' as *;
+
+.aside-bar {
+  grid-area: aside;
+  background: map-get($colors, primary-white);
+  width: 100%;
+  min-height: 100%;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 2rem;
+
+  &__section {
+    width: 80%;
+  }
+
+  hr {
+    width: 80%;
+  }
+}
+
+.page-logo {
+  font-style: italic;
+  width: 80%;
+  margin-top: 1rem;
+}
+
+.highlight {
+  color: map-get($colors, accent-blue);
+}
+
+.section__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  &-button {
+    cursor: pointer;
+    padding: 0.25rem 0.85rem;
+    background-color: map-get($colors, primary-white);
+    border: 1px solid map-get($colors, primary-dark);
+    border-radius: 0.25rem;
+    transition: all 250ms ease-in-out;
+  }
+
+  &-button:is(:hover, :focus) {
+    background-color: map-get($colors, secondary-light-gray);
+  }
+}
+
+.section__container {
+  margin-bottom: 2rem;
+  &-component {
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+
+    .active-dot {
+      display: none;
+      margin-left: auto;
+      margin-right: 0.8rem;
+      padding: 0.45rem;
+      border-radius: 100vh;
+      background-color: map-get($colors, accent-blue);
+    }
+
+    transition: 450ms all ease-in-out;
+  }
+
+  &-component[data-selected='true'] {
+    .active-dot {
+      display: block;
+    }
+  }
+
+  &-component:not([data-selected]):is(:hover, :focus) {
+    .active-dot {
+      display: block;
+      background-color: map-get($colors, secondary-gray);
+    }
+  }
+
+  &-component:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.wallet-logo {
+  padding: 0.65rem;
+  border-radius: 0.65rem;
+}

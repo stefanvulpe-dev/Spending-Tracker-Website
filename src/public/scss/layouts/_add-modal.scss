@@ -1,0 +1,77 @@
+@use '../base/' as *;
+
+.dialog__form {
+  width: min(30rem, 100% - 2rem);
+  position: absolute;
+  z-index: 2;
+  top: 5rem;
+  left: 50%;
+  transform: translate(-50%);
+  display: none;
+  background-color: map-get($colors, primary-white);
+  border: 1px solid map-get($colors, primary-dark);
+  padding: 3rem 1.75rem;
+  border-radius: 2rem;
+  border: 0;
+  box-shadow: 0 0 10rem black;
+
+  .dialog__title {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  form {
+    width: 80%;
+    margin-inline: auto;
+    display: grid;
+    gap: 2rem;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    place-items: center;
+    place-content: center;
+
+    .fields-wrapper {
+      width: 100%;
+    }
+
+    .fields-wrapper :is(label, input) {
+      display: block;
+      width: 100%;
+    }
+
+    .fields-wrapper :is(input) {
+      padding: 0.35rem;
+      margin-top: 0.5rem;
+    }
+
+    .fields-wrapper:is(:last-child) {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    button {
+      flex: 1;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 5rem;
+      background-color: map-get($colors, accent-blue);
+      color: map-get($colors, primary-white);
+      font-weight: map-get($font-weights, semi-bold);
+      border: 3px solid map-get($colors, accent-blue);
+      text-align: center;
+      transition: all 250ms ease-in-out;
+    }
+
+    button:is(:hover, :focus) {
+      background-color: map-get($colors, primary-white);
+      border-color: map-get($colors, accent-blue);
+      color: map-get($colors, accent-blue);
+    }
+  }
+}
+
+.visible {
+  display: block;
+}
