@@ -1,6 +1,6 @@
 import { Category, Expense, Wallet } from '../models/index.js';
 
-export const getWalletsData = async (req, res, next) => {
+export const getWalletData = async (req, res, next) => {
   const walletId = req.query.walletId;
   try {
     const wallet = await Wallet.findOne({
@@ -8,16 +8,8 @@ export const getWalletsData = async (req, res, next) => {
         id: Number(walletId),
       },
     });
-    const categoriesArr = await wallet.getCategories();
-    const expensesArr = [];
-    for (let category of categoriesArr) {
-      const expenses = await category.getExpenses();
-      expenses.forEach(expense => {
-        expensesArr.push(expense);
-      });
-    }
-    const resObj = { categories: categoriesArr, expenses: expensesArr };
-    res.status(200).json(resObj);
+    const expensesArr = await wallet.getExpenses();
+    res.status(200).json(expensesArr);
   } catch (err) {
     console.log(err);
     res.status(404).send('Wallet not found');
@@ -58,9 +50,11 @@ export const postAddExpense = async (req, res, next) => {
     expense.color = category.color;
     expense.backgroundColor = category.backgroundColor;
     expense.backgroundOpacity = category.backgroundOpacity;
+    expense.walletId = walletId;
 
     const insertedExpense = await Expense.create(expense);
     await category.addExpense(insertedExpense);
+
     res.status(200).json(insertedExpense);
   } catch (err) {
     console.log(err);

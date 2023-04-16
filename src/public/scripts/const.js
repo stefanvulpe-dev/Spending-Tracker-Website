@@ -84,12 +84,9 @@ const logExpenseInputs = [
 ];
 
 const getLogCategories = async () => {
-  const response = await fetch(
-    `/wallets/?walletId=${getCurrentWalletId().substring(6)}`,
-    {
-      method: 'GET',
-    }
-  );
+  const response = await fetch(`/categories`, {
+    method: 'GET',
+  });
   const result = await response.json();
   return Promise.resolve(result);
 };
@@ -97,8 +94,7 @@ const getLogCategories = async () => {
 const renderSelectOptions = async () => {
   const options = [];
 
-  const fetchedCategories = await getLogCategories();
-  const categories = fetchedCategories.categories;
+  const categories = await getLogCategories();
 
   let option = document.createElement('option');
   option.value = '--Please select a category--';

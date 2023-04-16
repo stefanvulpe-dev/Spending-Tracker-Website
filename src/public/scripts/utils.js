@@ -146,12 +146,12 @@ const updateCategoriesSection = expense => {
     `#category${expense.categoryId} div p:nth-child(2)`
   );
   const currentAmount = currentCategory.textContent.split(' ', 1).join();
-  if (+expense.amount < 0) {
+  if (expense.amount < 0) {
     currentCategory.textContent =
       Number(+currentAmount + -expense.amount) + ' RON';
   } else {
     currentCategory.textContent =
-      Number(+currentAmount + +expense.amount) + ' RON';
+      Number(+currentAmount + expense.amount) + ' RON';
   }
 };
 
@@ -201,11 +201,10 @@ const submitExpenseDetails = async formData => {
 const renderLogModal = async (id, formInputs, onClose) => {
   const fragment = new DocumentFragment();
 
-  let result, categories;
+  let categories;
 
   try {
-    result = await getLogCategories();
-    categories = result.categories;
+    categories = await getLogCategories();
   } catch (err) {
     console.log(err);
     return;

@@ -159,6 +159,9 @@ const renderMain = (walletName, expenses) => {
   aside.innerHTML += wallets;
   aside.innerHTML += `<hr>`;
 
+  const categories = renderWidget('Categories', result.categories);
+  aside.innerHTML += categories;
+
   const currentWalletId = 1;
 
   const currentWallet = document.querySelector(`#wallet${currentWalletId}`);
@@ -169,11 +172,8 @@ const renderMain = (walletName, expenses) => {
   });
   result = await response.json();
 
-  const categories = renderWidget('Categories', result.categories);
-  aside.innerHTML += categories;
-
   const main = document.querySelector('.main');
-  main.innerHTML += renderMain('Home', result.expenses);
+  main.innerHTML += renderMain('Home', result);
 
   const addWalletButton = document.querySelector('#addWallets');
   const addCategoryButton = document.querySelector('#addCategories');

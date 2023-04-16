@@ -46,8 +46,10 @@ app.get('/', (req, res, next) => {
 
 User.hasMany(Wallet);
 Wallet.belongsTo(User);
-Wallet.hasMany(Category);
-Category.belongsTo(Wallet);
+User.hasMany(Category);
+Category.belongsTo(User);
+Wallet.hasMany(Expense);
+Expense.belongsTo(Wallet);
 Category.hasMany(Expense);
 Expense.belongsTo(Category);
 
