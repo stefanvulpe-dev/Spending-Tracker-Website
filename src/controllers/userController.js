@@ -8,8 +8,8 @@ export const getUserDetails = async (req, res, next) => {
         id: Number(reqId),
       },
     });
-    const walletsArr = await user.getWallets();
-    const categoriesArr = await user.getCategories();
+    const walletsArr = await user.getWallets({ order: ['id'] });
+    const categoriesArr = await user.getCategories({ order: ['id'] });
     res.status(200).json({
       id: user.id,
       firstName: user.firstName,

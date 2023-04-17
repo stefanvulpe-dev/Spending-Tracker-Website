@@ -83,6 +83,30 @@ const logExpenseInputs = [
   },
 ];
 
+const editExpenseInputs = [
+  {
+    id: 'name',
+    name: 'name',
+    type: 'text',
+    label: 'Name',
+    placeholder: 'Enter another name',
+  },
+  {
+    id: 'amount',
+    name: 'amount',
+    label: 'Amount',
+    type: 'number',
+    placeholder: 'e.g. 275',
+  },
+  {
+    id: 'date',
+    name: 'date',
+    label: 'Date',
+    type: 'date',
+    placeholder: 'Pick up another date',
+  },
+];
+
 const getLogCategories = async () => {
   const response = await fetch(`/categories`, {
     method: 'GET',

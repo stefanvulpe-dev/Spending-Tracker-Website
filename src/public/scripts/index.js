@@ -14,8 +14,12 @@ const renderItem = (item, title) => {
   let { id, name, amount, iconTag, color, backgroundColor, backgroundOpacity } =
     item;
   id = title === 'Wallets' ? 'wallet' + id : 'category' + id;
+
   const span = title === 'Wallets' ? `<span class=active-dot></span>` : '';
-  return `<li class="section__container-component" id="${id}">
+  const onclick =
+    title === 'Wallets' ? `onclick="renderWalletData('${id}')"` : '';
+
+  return `<li class="section__container-component" id="${id}" ${onclick}>
               <i class="wallet-logo ${iconTag} fs-regular-100" alt="wallet-logo" style="background-color: hsla(${backgroundColor}, ${backgroundOpacity}); color: hsl(${color}); border: 2px solid hsl(${color})"></i>
               <div>
                   <p class="clr-primary-dark fs-regular-100 fw-600">${name}</p>
@@ -104,10 +108,10 @@ const renderHistoryItem = item => {
                 </div>
                 <div class="history__card-options">
                     <p class="fs-regular-100 fw-600" style="color: ${amountColor};"> ${amountSign}${amount} RON</p>
-                    <button class="edit-button" onclick="editExpense(${id})">
+                    <button class="edit-button" onclick="showEditExpense('${id}')">
                         <img src="assets/edit.svg" alt="edit-logo">
                     </button>
-                    <button class="edit-button" onclick="deleteExpense(${id})">
+                    <button class="edit-button" onclick="showDeleteExpense('${id}')">
                         <img src="assets/trash.svg" alt="trash-logo">
                     </button>
                 </div>
@@ -128,12 +132,12 @@ const renderHistory = expenses => {
             </section>`;
 };
 
-const renderMain = (walletName, expenses) => {
+const renderMain = (wallet, expenses) => {
   return (
     `<div class="main__title">
-            <i class="wallet-logo fa-solid fa-wallet fs-large-100" alt="wallet-logo" style="background-color: hsla(143, 75%, 38%, 1); color: hsl(0, 0%, 100%); border: 2px solid hsla(143, 75%, 38%, 1)"></i>
-            <h2 class="clr-primary-dark fs-large-100 fw-600">${walletName}</h2>
-            </div>` +
+        <i class="wallet-logo fa-solid fa-wallet fs-large-100" alt="wallet-logo" style="background-color: hsla(${wallet.backgroundColor}, ${wallet.backgroundOpacity}); color: hsl(${wallet.color}); border: 2px solid hsla(${wallet.backgroundColor}, 1)"></i>
+        <h2 class="clr-primary-dark fs-large-100 fw-600">${wallet.name}</h2>
+      </div>` +
     renderStats(expenses) +
     renderHistory(expenses)
   );
@@ -173,7 +177,7 @@ const renderMain = (walletName, expenses) => {
   result = await response.json();
 
   const main = document.querySelector('.main');
-  main.innerHTML += renderMain('Home', result);
+  main.innerHTML += renderMain(result.wallet, result.expenses);
 
   const addWalletButton = document.querySelector('#addWallets');
   const addCategoryButton = document.querySelector('#addCategories');

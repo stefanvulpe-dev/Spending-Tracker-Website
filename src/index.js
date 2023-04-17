@@ -44,13 +44,13 @@ app.get('/', (req, res, next) => {
   res.sendFile(path.join(__dirname, '/views/index.html'));
 });
 
-User.hasMany(Wallet);
+User.hasMany(Wallet, { onDelete: 'CASCADE' });
 Wallet.belongsTo(User);
-User.hasMany(Category);
+User.hasMany(Category, { onDelete: 'CASCADE' });
 Category.belongsTo(User);
-Wallet.hasMany(Expense);
+Wallet.hasMany(Expense, { onDelete: 'CASCADE' });
 Expense.belongsTo(Wallet);
-Category.hasMany(Expense);
+Category.hasMany(Expense, { onDelete: 'CASCADE' });
 Expense.belongsTo(Category);
 
 db.sync(/*{ force: true }*/)

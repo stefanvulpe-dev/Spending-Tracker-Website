@@ -9,10 +9,9 @@ export const getWalletData = async (req, res, next) => {
       },
     });
     const expensesArr = await wallet.getExpenses();
-    res.status(200).json(expensesArr);
+    res.status(200).json({ wallet: wallet, expenses: expensesArr });
   } catch (err) {
-    console.log(err);
-    res.status(404).send('Wallet not found');
+    res.status(404).json({ message: 'Wallet not found' });
   }
 };
 
@@ -59,5 +58,39 @@ export const postAddExpense = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status(404).json({ message: `Couldn't add the provided expense.` });
+  }
+};
+
+export const putEditExpense = async (req, res, next) => {
+  const expenseId = req.query.expenseId;
+
+  try {
+    const expense = await Expense.findOne({ where: { id: +expenseId } });
+    const category = await expense.getCategory();
+    const wallet = await expense.getWallet();
+
+    let currentAmount = wallet.amount;
+    await wallet.update({
+      amount: currentAmount - expense.amount + req.body.amount,
+    });
+
+    currentAmount = category.amount;
+    await category.update({
+      amount:
+        currentAmount -
+        (expense.amount < 0 ? -expense.amount : expense.amount) +
+        (req.body.amount < 0 ? -req.body.amount : req.body.amount),
+    });
+
+    const result = await expense.update({
+      name: req.body.name,
+      amount: req.body.amount,
+      date: req.body.date,
+    });
+
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({ message: 'Update of expense failed.' });
   }
 };

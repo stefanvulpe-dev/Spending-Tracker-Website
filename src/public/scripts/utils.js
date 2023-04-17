@@ -1,3 +1,16 @@
+const renderWalletData = async walletId => {
+  const response = await fetch(`/wallets/?walletId=${walletId.substring(6)}`, {
+    method: 'GET',
+  });
+  const walletData = await response.json();
+  const main = document.querySelector('.main');
+  main.innerHTML = renderMain(walletData.wallet, walletData.expenses);
+  const currentWallet = document.querySelector(`#${getCurrentWalletId()}`);
+  currentWallet.removeAttribute('data-selected');
+  const wallet = document.querySelector(`#${walletId}`);
+  wallet.setAttribute('data-selected', 'true');
+};
+
 const onSubmit = async (formElements, id) => {
   let location, title;
 
@@ -50,14 +63,18 @@ const onSubmit = async (formElements, id) => {
   }
   const result = await response.json();
   location.innerHTML += renderItem(result, title);
+
+  if (id === 'walletsModal') {
+    renderWalletData(`wallet${result.id}`);
+  }
 };
 
-const renderAddModal = (id, title, formInput, onClose) => {
+const renderAddModal = (id, title, formInput, onSubmit, onClose) => {
   const fragment = new DocumentFragment();
 
   const dialogWindow = document.createElement('dialog');
   dialogWindow.classList.add('dialog__form');
-  dialogWindow.id = id;
+  dialogWindow.id = id.includes('expense') ? 'editExpense' : id;
 
   const dialogTitle = document.createElement('h2');
   dialogTitle.textContent = title;
@@ -76,8 +93,10 @@ const renderAddModal = (id, title, formInput, onClose) => {
   formInput.forEach(element => {
     const wrapper = document.createElement('div');
     wrapper.classList.add('fields-wrapper');
+
     const formInput = document.createElement('input');
     const inputLabel = document.createElement('label');
+
     for (const field of Object.keys(element)) {
       if (field === 'label') {
         inputLabel.textContent = element[field];
@@ -116,7 +135,7 @@ const showAddModal = (id, title, formInput) => {
   const isModalCreated = !!document.querySelector(`#${id}`);
 
   if (!isModalCreated) {
-    renderAddModal(id, title, formInput, () => {
+    renderAddModal(id, title, formInput, onSubmit, () => {
       clearInputs(id);
       toggleElement(id);
     });
@@ -151,7 +170,7 @@ const updateCategoriesSection = expense => {
       Number(+currentAmount + -expense.amount) + ' RON';
   } else {
     currentCategory.textContent =
-      Number(+currentAmount + expense.amount) + ' RON';
+      Number(+currentAmount + +expense.amount) + ' RON';
   }
 };
 
@@ -307,4 +326,42 @@ const showLogModal = async (id, formInputs) => {
   } else {
     toggleLog(id);
   }
+};
+
+const submitEditedExpense = async (formElements, id) => {
+  const newExpense = {
+    name: formElements[0].value,
+    amount: +formElements[1].value,
+    date: formElements[2].value,
+  };
+
+  const response = await fetch(
+    `/wallets/edit-expense/?expenseId=${id.substring(7)}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newExpense),
+    }
+  );
+
+  const expense = await response.json();
+
+  // TO DO: Update wallet amount, category and stats section
+};
+
+const showEditExpense = id => {
+  const isCreated = !!document.querySelector('#editExpense');
+
+  if (!isCreated) {
+    renderAddModal(
+      id,
+      'Edit expense',
+      editExpenseInputs,
+      submitEditedExpense,
+      () => toggleElement('editExpense')
+    );
+  }
+  toggleElement('editExpense');
 };
