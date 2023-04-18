@@ -4,13 +4,18 @@ import bodyParser from 'body-parser';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { compileSassAndSaveMultiple } from 'compile-sass';
 
 dotenv.config();
 
 import { db } from './models/db/connection.js';
 import { User, Wallet, Category, Expense } from './models/index.js';
-import { compileSassAndSaveMultiple } from 'compile-sass';
-import { userRouter, walletRouter, categoryRouter } from './routes/index.js';
+import {
+  userRouter,
+  walletRouter,
+  categoryRouter,
+  expenseRouter,
+} from './routes/index.js';
 
 const PORT = process.env.PORT || 3000;
 
@@ -19,9 +24,7 @@ const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 app.use(express.static(path.join(__dirname, 'public'))); // for delivering static resources
-
-app.use(bodyParser.urlencoded({ extended: false })); // for working with forms
-app.use(express.json()); // for parsing json data
+app.use(express.json()); // for working with json data
 
 await compileSassAndSaveMultiple({
   sassPath: path.join(__dirname, 'public/scss/'),
@@ -39,6 +42,7 @@ try {
 app.use(userRouter);
 app.use(walletRouter);
 app.use(categoryRouter);
+app.use(expenseRouter);
 
 app.get('/', (req, res, next) => {
   res.sendFile(path.join(__dirname, '/views/index.html'));

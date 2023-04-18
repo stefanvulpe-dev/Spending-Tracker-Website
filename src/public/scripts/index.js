@@ -23,7 +23,9 @@ const renderItem = (item, title) => {
               <i class="wallet-logo ${iconTag} fs-regular-100" alt="wallet-logo" style="background-color: hsla(${backgroundColor}, ${backgroundOpacity}); color: hsl(${color}); border: 2px solid hsl(${color})"></i>
               <div>
                   <p class="clr-primary-dark fs-regular-100 fw-600">${name}</p>
-                  <p class="clr-secondary-gray fs-small-200 fw-400">${amount} RON</p>
+                  <p class="clr-secondary-gray fs-small-200 fw-400">${(+amount).toFixed(
+                    2
+                  )} RON</p>
               </div>
               ${span}
           </li>`;
@@ -64,14 +66,18 @@ const renderStats = expenses => {
                 <img src="assets/trending-up.svg" alt="trending-up-logo">
                 <div class="card__description">
                     <p class="card__info | clr-secondary-gray fs-small-100 fw-400">Total Incomes</p>
-                    <p class="card__amount | clr-secondary-gray fs-regular-100 fw-700">${totalIncomes} RON</p>
+                    <p class="card__amount | clr-secondary-gray fs-regular-100 fw-700">${totalIncomes.toFixed(
+                      2
+                    )} RON</p>
                 </div>
                 </div>
                 <div class="main__stats-card">
                 <img src="assets/trending-down.svg" alt="trending-down-logo">
                 <div class="card__description">
                     <p class="card__info | clr-secondary-gray fs-small-100 fw-400">Total Expenses</p>
-                    <p class="card__amount | clr-secondary-gray fs-regular-100 fw-700">${totalExpenses} RON</p>
+                    <p class="card__amount | clr-secondary-gray fs-regular-100 fw-700">${totalExpenses.toFixed(
+                      2
+                    )} RON</p>
                 </div>
                 </div>
             </div>`;
@@ -107,7 +113,9 @@ const renderHistoryItem = item => {
                     </div>
                 </div>
                 <div class="history__card-options">
-                    <p class="fs-regular-100 fw-600" style="color: ${amountColor};"> ${amountSign}${amount} RON</p>
+                    <p class="fs-regular-100 fw-600" style="color: ${amountColor};">${amountSign}${(+amount).toFixed(
+    2
+  )} RON</p>
                     <button class="edit-button" onclick="showEditExpense('${id}')">
                         <img src="assets/edit.svg" alt="edit-logo">
                     </button>
@@ -185,6 +193,7 @@ const renderMain = (wallet, expenses) => {
   addWalletButton.addEventListener('click', () =>
     showAddModal('walletsModal', 'Wallet details', walletInputs)
   );
+
   addCategoryButton.addEventListener('click', () =>
     showAddModal('categoriesModal', 'Category details', categoryInputs)
   );

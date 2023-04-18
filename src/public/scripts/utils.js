@@ -1,3 +1,8 @@
+/**
+ * This function renders the expenses for the currently selected wallet
+ * @param {string} walletId
+ */
+
 const renderWalletData = async walletId => {
   const response = await fetch(`/wallets/?walletId=${walletId.substring(6)}`, {
     method: 'GET',
@@ -11,6 +16,11 @@ const renderWalletData = async walletId => {
   wallet.setAttribute('data-selected', 'true');
 };
 
+/**
+ * Submit handler for add wallet and cateory modal
+ * @param {} formElements
+ * @param {string} id
+ */
 const onSubmit = async (formElements, id) => {
   let location, title;
 
@@ -69,12 +79,24 @@ const onSubmit = async (formElements, id) => {
   }
 };
 
+/**
+ * This function renders the modals for wallet and category
+ * @param {*} id
+ * @param {*} title
+ * @param {*} formInput
+ * @param {*} onSubmit
+ * @param {*} onClose
+ */
 const renderAddModal = (id, title, formInput, onSubmit, onClose) => {
   const fragment = new DocumentFragment();
 
   const dialogWindow = document.createElement('dialog');
   dialogWindow.classList.add('dialog__form');
-  dialogWindow.id = id.includes('expense') ? 'editExpense' : id;
+  dialogWindow.id = title.includes('Edit')
+    ? 'editExpense'
+    : title.includes('Delete')
+    ? 'deleteExpense'
+    : id;
 
   const dialogTitle = document.createElement('h2');
   dialogTitle.textContent = title;
@@ -104,8 +126,13 @@ const renderAddModal = (id, title, formInput, onSubmit, onClose) => {
       } else {
         formInput[field] = element[field];
       }
+
       if (element[field] === 'number') {
         formInput.step = 'any';
+      }
+
+      if (element[field] === 'hidden') {
+        inputLabel.style.textAlign = 'center';
       }
     }
     wrapper.append(inputLabel, formInput);
@@ -113,7 +140,9 @@ const renderAddModal = (id, title, formInput, onSubmit, onClose) => {
   });
 
   const submitButton = document.createElement('button');
-  submitButton.textContent = '\u002B Add';
+  submitButton.textContent = id.includes('expense')
+    ? '\u2713 Confirm'
+    : '\u002B Add';
   submitButton.type = 'submit';
 
   const closeButton = document.createElement('button');
@@ -131,6 +160,12 @@ const renderAddModal = (id, title, formInput, onSubmit, onClose) => {
   document.body.append(dialogWindow);
 };
 
+/**
+ * This function shows the add wallet/category modals, toggling them
+ * @param {*} id
+ * @param {*} title
+ * @param {*} formInput
+ */
 const showAddModal = (id, title, formInput) => {
   const isModalCreated = !!document.querySelector(`#${id}`);
 
@@ -143,45 +178,101 @@ const showAddModal = (id, title, formInput) => {
   toggleElement(id);
 };
 
-const updateStatsSection = amount => {
+/**
+ * This function updates the statistics section of the main frame after adding a new expense
+ * @param {*} amount
+ * @param {*} oldAmount
+ */
+const updateStatsSection = (amount, oldAmount) => {
   let element, number;
   if (amount < 0) {
     element = document.querySelector(
       '.main__stats-card:nth-child(2) .card__amount'
     );
     number = element.textContent.split(' ', 1).join();
-    element.textContent = Number(+number + -amount) + ' RON';
+    element.textContent =
+      Number(+number - -oldAmount + -amount).toFixed(2) + ' RON';
   } else {
     element = document.querySelector(
       '.main__stats-card:first-child .card__amount'
     );
     number = element.textContent.split(' ', 1).join();
-    element.textContent = Number(+number + amount) + ' RON';
+    element.textContent =
+      Number(+number - oldAmount + amount).toFixed(2) + ' RON';
   }
 };
 
-const updateCategoriesSection = expense => {
+/**
+ * This function updates the categories section after adding a new expense
+ * @param {*} expense
+ * @param {*} oldAmount
+ */
+const updateCategoriesSection = (expense, oldAmount) => {
   const currentCategory = document.querySelector(
     `#category${expense.categoryId} div p:nth-child(2)`
   );
   const currentAmount = currentCategory.textContent.split(' ', 1).join();
   if (expense.amount < 0) {
     currentCategory.textContent =
-      Number(+currentAmount + -expense.amount) + ' RON';
+      Number(+currentAmount - -oldAmount + -expense.amount).toFixed(2) + ' RON';
   } else {
     currentCategory.textContent =
-      Number(+currentAmount + +expense.amount) + ' RON';
+      Number(+currentAmount - oldAmount + +expense.amount).toFixed(2) + ' RON';
   }
 };
 
-const updateWalletBalance = amount => {
+/**
+ * This function updates an expense card after editting it
+ * @param {*} expense
+ */
+const updateExpenseCard = expense => {
+  const expenseAmount = document.querySelector(
+    `#expense${expense.id} .history__card-options p`
+  );
+  const amountSign = expense.amount < 0 ? '' : '+';
+  const amountColor =
+    expense.amount < 0 ? 'hsla(0, 79%, 63%, 1)' : 'hsla(146, 64%, 36%, 1)';
+
+  expenseAmount.textContent = `${amountSign}${(+expense.amount).toFixed(
+    2
+  )} RON`;
+
+  expenseAmount.style.color = amountColor;
+
+  const expenseTitle = document.querySelector(
+    `#expense${expense.id} .component__title`
+  );
+  expenseTitle.textContent = expense.name;
+
+  const expenseDate = document.querySelector(
+    `#expense${expense.id} .component__date`
+  );
+  expenseDate.textContent = new Intl.DateTimeFormat('en-GB', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  }).format(new Date(expense.date));
+};
+
+/**
+ * This function updates the current wallet balance after some changes regarding expenses are performed by the user
+ * @param {*} amount
+ * @param {*} oldAmount
+ */
+const updateWalletBalance = (amount, oldAmount) => {
   const walletBallance = document.querySelector(
     `#${getCurrentWalletId()} div p:nth-child(2)`
   );
   const number = walletBallance.textContent.split(' ', 1).join();
-  walletBallance.textContent = Number(+number + amount) + ' RON';
+  walletBallance.textContent =
+    Number(+number - oldAmount + amount).toFixed(2) + ' RON';
 };
 
+/**
+ * This function handles the submitting of a new expense
+ * @param {*} formData
+ * @returns
+ */
 const submitExpenseDetails = async formData => {
   const [categoryId, name, amount, date] = [
     formData['0'].value,
@@ -190,13 +281,11 @@ const submitExpenseDetails = async formData => {
     formData['3'].value,
   ];
 
-  /* TO DO: Form validation */
-
   const walletId = getCurrentWalletId().substring(6);
   let response, expense;
   try {
     response = await fetch(
-      `wallets/add-expense/?walletId=${walletId}&categoryId=${categoryId}`,
+      `expenses/add-expense/?walletId=${walletId}&categoryId=${categoryId}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -212,11 +301,18 @@ const submitExpenseDetails = async formData => {
   const expenseList = document.querySelector('.history ul');
   expenseList.innerHTML += renderHistoryItem(expense);
 
-  updateStatsSection(amount);
-  updateCategoriesSection(expense);
-  updateWalletBalance(amount);
+  updateStatsSection(amount, 0);
+  updateCategoriesSection(expense, 0);
+  updateWalletBalance(amount, 0);
 };
 
+/**
+ * This function renders the modal window for the Log Expense component
+ * @param {*} id
+ * @param {*} formInputs
+ * @param {*} onClose
+ * @returns
+ */
 const renderLogModal = async (id, formInputs, onClose) => {
   const fragment = new DocumentFragment();
 
@@ -275,6 +371,10 @@ const renderLogModal = async (id, formInputs, onClose) => {
       formField.placeholder = placeholder;
     }
 
+    if (type === 'number') {
+      formField.step = 'any';
+    }
+
     formField.id = id;
     formField.name = name;
     formField.required = true;
@@ -314,6 +414,11 @@ const renderLogModal = async (id, formInputs, onClose) => {
   return Promise.resolve(document.body.append(popupWindow));
 };
 
+/**
+ * This function shows the Log Expense Modal, toggling it
+ * @param {*} id
+ * @param {*} formInputs
+ */
 const showLogModal = async (id, formInputs) => {
   const isCreated = !!document.querySelector(`#${id}`);
 
@@ -328,6 +433,11 @@ const showLogModal = async (id, formInputs) => {
   }
 };
 
+/**
+ * This function handles the submitting of a new expense, after some changes are applied to it
+ * @param {*} formElements
+ * @param {*} id
+ */
 const submitEditedExpense = async (formElements, id) => {
   const newExpense = {
     name: formElements[0].value,
@@ -336,7 +446,7 @@ const submitEditedExpense = async (formElements, id) => {
   };
 
   const response = await fetch(
-    `/wallets/edit-expense/?expenseId=${id.substring(7)}`,
+    `/expenses/edit-expense/?expenseId=${id.substring(7)}`,
     {
       method: 'PUT',
       headers: {
@@ -348,20 +458,124 @@ const submitEditedExpense = async (formElements, id) => {
 
   const expense = await response.json();
 
-  // TO DO: Update wallet amount, category and stats section
+  updateExpenseCard(expense);
+  updateStatsSection(expense.amount, expense.oldAmount);
+  updateCategoriesSection(expense, expense.oldAmount);
+  updateWalletBalance(expense.amount, expense.oldAmount);
 };
 
-const showEditExpense = id => {
-  const isCreated = !!document.querySelector('#editExpense');
-
-  if (!isCreated) {
-    renderAddModal(
-      id,
-      'Edit expense',
-      editExpenseInputs,
-      submitEditedExpense,
-      () => toggleElement('editExpense')
+/**
+ * This function updates the corresponding category after the deletion of an expense
+ * @param {*} amount
+ */
+const updateOneStat = amount => {
+  let element, number;
+  if (amount < 0) {
+    element = document.querySelector(
+      '.main__stats-card:nth-child(2) .card__amount'
     );
+    number = element.textContent.split(' ', 1).join();
+    element.textContent = Number(+number - -amount).toFixed(2) + ' RON';
+  } else {
+    element = document.querySelector(
+      '.main__stats-card:first-child .card__amount'
+    );
+    number = element.textContent.split(' ', 1).join();
+    element.textContent = Number(+number - amount).toFixed(2) + ' RON';
   }
+};
+
+/**
+ * This function updates the category section of the recently deleted expense
+ * @param {*} expense
+ */
+const updateOneCategory = expense => {
+  const currentCategory = document.querySelector(
+    `#category${expense.categoryId} div p:nth-child(2)`
+  );
+  const currentAmount = currentCategory.textContent.split(' ', 1).join();
+  if (expense.amount < 0) {
+    currentCategory.textContent =
+      Number(+currentAmount - -expense.amount).toFixed(2) + ' RON';
+  } else {
+    currentCategory.textContent =
+      Number(+currentAmount - +expense.amount).toFixed(2) + ' RON';
+  }
+};
+
+/**
+ * This function shows the Edit Expense Modal window
+ * @param {*} id
+ */
+const showEditExpense = id => {
+  renderAddModal(
+    id,
+    'Edit expense',
+    editExpenseInputs,
+    submitEditedExpense,
+    () => {
+      toggleElement('editExpense');
+      const modal = document.querySelector(`#editExpense`);
+      modal.remove();
+    }
+  );
   toggleElement('editExpense');
+};
+
+/**
+ * This function handles the deletion of an expense
+ * @param {*} formElements
+ * @param {*} id
+ */
+const submitDeletedExpense = async (formElements, id) => {
+  let response, result;
+
+  response = await fetch(`/expenses/?expenseId=${id.substring(7)}`, {
+    method: 'GET',
+  });
+
+  const expenseData = await response.json();
+
+  response = await fetch(
+    `/expenses/delete-expense/?expenseId=${id.substring(7)}`,
+    { method: 'DELETE' }
+  );
+
+  result = await response.json();
+
+  if (result.message === 'success') {
+    updateOneStat(+expenseData.amount);
+    updateOneCategory(expenseData);
+    updateWalletBalance(0, +expenseData.amount);
+
+    const expenseElement = document.querySelector(`#${id}`);
+    expenseElement.remove();
+  }
+};
+
+/**
+ * This function shows the Delete Expense Modal window
+ * @param {*} id
+ */
+const showDeleteExpense = id => {
+  const expenseTitle = document.querySelector(`#${id} .component__title`);
+  renderAddModal(
+    id,
+    'Delete expense',
+    [
+      {
+        id: 'name',
+        name: 'name',
+        type: 'hidden',
+        label: `Are you sure you want to delete ${expenseTitle.textContent}?`,
+      },
+    ],
+    submitDeletedExpense,
+    () => {
+      toggleElement('deleteExpense');
+      const modal = document.querySelector(`#deleteExpense`);
+      modal.remove();
+    }
+  );
+  toggleElement('deleteExpense');
 };

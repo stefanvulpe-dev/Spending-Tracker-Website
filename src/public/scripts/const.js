@@ -8,6 +8,9 @@ const iconSources = [
   'fa-solid fa-hand-holding-heart',
   'fa-solid fa-cart-shopping',
   'fa-solid fa-star',
+  'fa-solid fa-book',
+  'fa-solid fa-shield-halved',
+  'fa-solid fa-tree',
 ];
 
 function rand(min, max) {
@@ -22,7 +25,7 @@ function get_random_color() {
 }
 
 function get_random_src() {
-  return iconSources[Math.round(rand(0, 8))];
+  return iconSources[Math.round(rand(0, 11))];
 }
 
 const walletInputs = [
