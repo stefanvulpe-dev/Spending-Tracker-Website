@@ -1,9 +1,14 @@
 const renderHeader = (firstName, lastName) => {
   return `<div class="header__title">
-            <h2 class="clr-primary-dark fs-regular-200 fw-600">Hi, ${firstName} ${lastName}!</h2>
+            <h2 class="clr-primary-dark fs-regular-200 fw-600">Hi, ${firstName} ${lastName}!             
+            <span class="logout">
+              <span class="v-bar"></span><span class="v-bar"></span>
+            </span>
+            </h2>
             <p class="clr-secondary-gray fs-regular-100 fw-400">
                 How much did you spend today?
             </p>
+            <div class="logout__button fs-small-200 fw-600"> Sign Out <i class="fa-solid fa-arrow-right-from-bracket"></i> </div>
           </div>
           <button class="clr-primary-white fs-regular-100 fw-500 | header__button">
           + Log Expense
@@ -152,7 +157,7 @@ const renderMain = (wallet, expenses) => {
 };
 
 (async function () {
-  let response = await fetch('/users/?userId=1', { method: 'GET' });
+  let response = await fetch('/users', { method: 'GET' });
   let result = await response.json();
 
   const header = document.querySelector('.header');
@@ -167,6 +172,19 @@ const renderMain = (wallet, expenses) => {
     toggle_button.classList.toggle('active');
   });
 
+  const logout_toggle = document.querySelector('.logout');
+  const logoutButton = document.querySelector('.logout__button');
+
+  logout_toggle.addEventListener('click', () => {
+    logout_toggle.classList.toggle('active');
+    logoutButton.classList.toggle('visible');
+  });
+
+  logoutButton.addEventListener('click', async () => {
+    await fetch('/logout', { method: 'GET' });
+    location.assign('/login');
+  });
+
   const wallets = renderWidget('Wallets', result.wallets);
   aside.innerHTML += wallets;
   aside.innerHTML += `<hr>`;
@@ -174,18 +192,20 @@ const renderMain = (wallet, expenses) => {
   const categories = renderWidget('Categories', result.categories);
   aside.innerHTML += categories;
 
-  const currentWalletId = 1;
+  const currentWalletId = result.mainWallet;
 
-  const currentWallet = document.querySelector(`#wallet${currentWalletId}`);
-  currentWallet.setAttribute('data-selected', true);
+  if (currentWalletId !== null) {
+    const currentWallet = document.querySelector(`#wallet${currentWalletId}`);
+    currentWallet.setAttribute('data-selected', true);
 
-  response = await fetch(`/wallets/?walletId=${currentWalletId}`, {
-    method: 'GET',
-  });
-  result = await response.json();
+    response = await fetch(`/wallets/?walletId=${currentWalletId}`, {
+      method: 'GET',
+    });
+    result = await response.json();
 
-  const main = document.querySelector('.main');
-  main.innerHTML += renderMain(result.wallet, result.expenses);
+    const main = document.querySelector('.main');
+    main.innerHTML += renderMain(result.wallet, result.expenses);
+  }
 
   const addWalletButton = document.querySelector('#addWallets');
   const addCategoryButton = document.querySelector('#addCategories');

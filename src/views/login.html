@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <div class="wrapper">
+        <main class="wide-container">
+            <h1 class="page-logo | clr-primary-dark fs-large-100 fw-800"><span class="highlight">Bud</span>get</h1>
+            <form class="form">
+                <div class="fields-wrapper">
+                    <label for="email" name="email">Email</label>
+                    <input type="email" id="email" placeholder="Email address" required>
+                    <p class="email error"></p>
+                </div>
+                <div class="fields-wrapper">
+                    <label for="password" name="password">Password</label>
+                    <input type="password" id="password" placeholder="Password" required>
+                    <p class="password error"></p>
+                </div>
+                <div class="fields-wrapper">
+                    <button type="button" onclick="location.assign('/signup');">Sign Up</button>
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="/scripts/login.js"></script>
+</body>
+</html>

@@ -18,7 +18,7 @@ export const getWalletData = async (req, res, next) => {
 export const postAddWallet = async (req, res, next) => {
   try {
     const walletData = req.body;
-    walletData.userId = 1; // TO DO: change userId with the current logged userId
+    walletData.userId = res.locals.user.id;
     const newWallet = await Wallet.create(walletData);
     res.status(200).json(newWallet);
   } catch (err) {

@@ -11,9 +11,12 @@
   "author": "Stefan Vulpe",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "compile-sass": "^2.0.0",
+    "cookie-parser": "^1.4.6",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
     "pg": "^8.10.0",
     "sass": "^1.62.0",
     "sequelize": "^6.31.0"

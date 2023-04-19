@@ -11,7 +11,9 @@ const renderWalletData = async walletId => {
   const main = document.querySelector('.main');
   main.innerHTML = renderMain(walletData.wallet, walletData.expenses);
   const currentWallet = document.querySelector(`#${getCurrentWalletId()}`);
-  currentWallet.removeAttribute('data-selected');
+  if (currentWallet !== null) {
+    currentWallet.removeAttribute('data-selected');
+  }
   const wallet = document.querySelector(`#${walletId}`);
   wallet.setAttribute('data-selected', 'true');
 };
@@ -103,6 +105,7 @@ const renderAddModal = (id, title, formInput, onSubmit, onClose) => {
   dialogTitle.classList.add('dialog__title');
 
   const dialogForm = document.createElement('form');
+  dialogForm.classList.add('form');
 
   dialogForm.addEventListener('submit', e => {
     e.preventDefault();

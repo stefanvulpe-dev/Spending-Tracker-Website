@@ -2,7 +2,7 @@ import { Category } from '../models/index.js';
 
 export const getCategories = async (req, res, next) => {
   try {
-    const userId = 1; // TO DO: change with the current logged userId
+    const userId = res.locals.user.id;
     const categories = await Category.findAll({ where: { userId: +userId } });
     res.status(200).json(categories);
   } catch (err) {
@@ -14,7 +14,7 @@ export const getCategories = async (req, res, next) => {
 export const postAddCategory = async (req, res, next) => {
   try {
     const categoryData = req.body;
-    categoryData.userId = 1; // TO DO: change userId with the current logged userId
+    categoryData.userId = res.locals.user.id;
     const newCategory = await Category.create(categoryData);
     res.status(200).json(newCategory);
   } catch (err) {

@@ -1,0 +1,33 @@
+@use '../base/' as *;
+
+.wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wide-container {
+  width: min(27.5rem, 100% - 2rem);
+  background-color: map-get($colors, primary-white);
+  padding: 2rem 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 50px map-get($colors, secondary-gray);
+
+  .page-logo {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .error {
+    color: map-get($colors, accent-red);
+    font-weight: map-get($font-weights, semi-bold);
+  }
+
+  .signup-btn {
+    padding-inline: 2rem;
+    margin-left: auto;
+  }
+}

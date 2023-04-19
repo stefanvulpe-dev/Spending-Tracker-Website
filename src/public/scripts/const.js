@@ -167,5 +167,8 @@ const clearInputs = id => {
 
 const getCurrentWalletId = () => {
   const wallet = document.querySelector('[data-selected]');
-  return wallet.id;
+  if (wallet) {
+    return wallet.id;
+  }
+  return 'null';
 };

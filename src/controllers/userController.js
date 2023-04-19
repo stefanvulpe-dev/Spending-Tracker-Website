@@ -1,11 +1,11 @@
 import { User } from '../models/index.js';
 
 export const getUserDetails = async (req, res, next) => {
-  const reqId = req.query.userId;
   try {
+    const userId = res.locals.user.id;
     const user = await User.findOne({
       where: {
-        id: Number(reqId),
+        id: Number(userId),
       },
     });
     const walletsArr = await user.getWallets({ order: ['id'] });
@@ -14,6 +14,7 @@ export const getUserDetails = async (req, res, next) => {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
+      mainWallet: walletsArr.length > 0 ? walletsArr[0].id : null,
       wallets: walletsArr,
       categories: categoriesArr,
     });
