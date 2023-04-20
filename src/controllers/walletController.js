@@ -1,4 +1,4 @@
-import { Category, Expense, Wallet } from '../models/index.js';
+import { Wallet } from '../models/index.js';
 
 export const getWalletData = async (req, res, next) => {
   const walletId = req.query.walletId;
@@ -20,9 +20,9 @@ export const postAddWallet = async (req, res, next) => {
     const walletData = req.body;
     walletData.userId = res.locals.user.id;
     const newWallet = await Wallet.create(walletData);
-    res.status(200).json(newWallet);
+    res.status(201).json(newWallet);
   } catch (err) {
     console.log(err);
-    res.status(404).json({ message: `Error. Wallet couldn't be created.` });
+    res.status(400).json({ message: `Error. Wallet couldn't be created.` });
   }
 };

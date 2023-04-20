@@ -39,10 +39,10 @@ export const postAddExpense = async (req, res, next) => {
     const insertedExpense = await Expense.create(expense);
     await category.addExpense(insertedExpense);
 
-    res.status(200).json(insertedExpense);
+    res.status(201).json(insertedExpense);
   } catch (err) {
     console.log(err);
-    res.status(404).json({ message: `Couldn't add the provided expense.` });
+    res.status(400).json({ message: `Couldn't add the provided expense.` });
   }
 };
 
@@ -75,10 +75,10 @@ export const putEditExpense = async (req, res, next) => {
       date: req.body.date,
     });
 
-    res.status(200).json({ ...result.dataValues, oldAmount: oldAmount });
+    res.status(201).json({ ...result.dataValues, oldAmount: oldAmount });
   } catch (err) {
     console.log(err);
-    res.status(404).json({ message: 'Update of expense failed.' });
+    res.status(400).json({ message: 'Update of expense failed.' });
   }
 };
 
@@ -103,6 +103,6 @@ export const deleteExpense = async (req, res, next) => {
     res.status(200).json({ message: 'success' });
   } catch (err) {
     console.log(err);
-    res.status(404).json({ message: `Error. Expense couldn't be deleted.` });
+    res.status(400).json({ message: `Error. Expense couldn't be deleted.` });
   }
 };

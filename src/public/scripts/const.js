@@ -1,18 +1,3 @@
-const iconSources = [
-  'fa-solid fa-house',
-  'fa-regular fa-envelope',
-  'fa-solid fa-basket-shopping',
-  'fa-solid fa-user',
-  'fa-solid fa-gift',
-  'fa-solid fa-gifts',
-  'fa-solid fa-hand-holding-heart',
-  'fa-solid fa-cart-shopping',
-  'fa-solid fa-star',
-  'fa-solid fa-book',
-  'fa-solid fa-shield-halved',
-  'fa-solid fa-tree',
-];
-
 function rand(min, max) {
   return min + Math.random() * (max - min);
 }
@@ -27,6 +12,21 @@ function get_random_color() {
 function get_random_src() {
   return iconSources[Math.round(rand(0, 11))];
 }
+
+const iconSources = [
+  'fa-solid fa-house',
+  'fa-regular fa-envelope',
+  'fa-solid fa-basket-shopping',
+  'fa-solid fa-user',
+  'fa-solid fa-gift',
+  'fa-solid fa-gifts',
+  'fa-solid fa-hand-holding-heart',
+  'fa-solid fa-cart-shopping',
+  'fa-solid fa-star',
+  'fa-solid fa-book',
+  'fa-solid fa-shield-halved',
+  'fa-solid fa-tree',
+];
 
 const walletInputs = [
   {

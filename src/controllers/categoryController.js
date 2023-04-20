@@ -6,7 +6,7 @@ export const getCategories = async (req, res, next) => {
     const categories = await Category.findAll({ where: { userId: +userId } });
     res.status(200).json(categories);
   } catch (err) {
-    res.status(404).json({ message: `Error. Categories not found.` });
+    res.status(400).json({ message: `Error. Categories not found.` });
     console.log(err);
   }
 };
@@ -16,9 +16,9 @@ export const postAddCategory = async (req, res, next) => {
     const categoryData = req.body;
     categoryData.userId = res.locals.user.id;
     const newCategory = await Category.create(categoryData);
-    res.status(200).json(newCategory);
+    res.status(201).json(newCategory);
   } catch (err) {
     console.log(err);
-    res.status(404).json({ message: `Error. Category couldn't be created.` });
+    res.status(400).json({ message: `Error. Category couldn't be created.` });
   }
 };
